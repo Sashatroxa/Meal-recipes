@@ -43,7 +43,8 @@ private extension IngredientsController {
     func setupUI() {
         setupTable()
         
-        titleLabel.text = "sdfsd"
+        titleLabel.text = meal?.strMeal
+        titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
     }
     
     func setupTable() {
@@ -56,10 +57,28 @@ private extension IngredientsController {
 
 //MARK: - UITableViewDelegate
 extension IngredientsController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = UIView(frame: .init(x: 0, y: 0, width: tableView.bounds.width, height: 70))
+        header.backgroundColor = .clear
+        
+        let titleLabel = UILabel(frame: .init(x: 0, y: 25, width: tableView.bounds.width, height: 20))
+        titleLabel.textColor = .black
+        titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+        titleLabel.text = Sections.allCases[section].title
+        
+        header.addSubview(titleLabel)
+        
+        return header
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 70
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch Sections.allCases[indexPath.section] {
         case .instructions: return UITableView.automaticDimension
-        case .ingredients: return 60
+        case .ingredients: return 30
         }
     }
 }
@@ -112,7 +131,7 @@ extension IngredientsController: IngredientsViewProtocol {
 //MARK: - Sections
 private extension IngredientsController {
     enum Sections: Int, CaseIterable {
-        case instructions, ingredients
+        case ingredients, instructions
         
         var title: String {
             switch self {
